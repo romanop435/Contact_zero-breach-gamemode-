@@ -1,0 +1,60 @@
+CZ_ROLE_CONFIG = CZ_ROLE_CONFIG or {}
+
+-- Per-map role config for spawns and loadouts.
+-- Use role ids from BR.Roles (see lua/ContactZero/breach/sh_breach.lua).
+-- Format:
+-- CZ_ROLE_CONFIG["map_name"] = {
+--     roles = {
+--         ["classd_default"] = {
+--             spawnpoints = {
+--                 { pos = Vector(0, 0, 0), ang = Angle(0, 0, 0) },
+--             },
+--             loadout = { "weapon_hands_sh" },
+--             keycard = 1,
+--             model = "models/player/Group01/male_02.mdl",
+--             health = 100,
+--             walkSpeed = 130,
+--             runSpeed = 280
+--         }
+--     },
+--     factions = {
+--         classd = {
+--             spawnpoints = {
+--                 { pos = Vector(0, 0, 0), ang = Angle(0, 0, 0) }
+--             }
+--         }
+--     }
+-- }
+
+-- Example placeholder for your map:
+-- CZ_ROLE_CONFIG["gm_flatgrass"] = {
+--     roles = {
+--         classd_default = {
+--             spawnpoints = {
+--                 { pos = Vector(0, 0, 0), ang = Angle(0, 0, 0) }
+--             },
+--             loadout = { "weapon_hands_sh" },
+--             keycard = 1
+--         },
+--         sci_default = {
+--             spawnpoints = {
+--                 { pos = Vector(100, 0, 0), ang = Angle(0, 90, 0) }
+--             },
+--             loadout = { "weapon_hands_sh" },
+--             keycard = 2
+--         },
+--         guard_default = {
+--             spawnpoints = {
+--                 { pos = Vector(200, 0, 0), ang = Angle(0, 180, 0) }
+--             },
+--             loadout = { "weapon_hands_sh", "weapon_pistol" },
+--             keycard = 3
+--         },
+--         scp_default = {
+--             spawnpoints = {
+--                 { pos = Vector(300, 0, 0), ang = Angle(0, 0, 0) }
+--             },
+--             loadout = false
+--         }
+--     }
+-- }
