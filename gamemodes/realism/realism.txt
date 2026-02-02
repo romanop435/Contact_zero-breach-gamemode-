@@ -1,0 +1,7 @@
+"realism"
+{
+	"base"		"base"
+	"title"		"Breachymba"
+	"maps"		"^gm_"
+	"menusystem"	"1"
+}
