@@ -64,26 +64,29 @@ local function includeFile(path)
         include(path)
     end
 end
-
-local function includeDirRecursive(dir)
-    dir = norm(dir)
-    if dir:sub(-1) == "/" then dir = dir:sub(1, -2) end
-
-    local files, dirs = file.Find(dir .. "/*", "LUA")
-    if files then
-        for _, f in ipairs(files) do
-            if string.EndsWith(f, ".lua") then
-                includeFile(dir .. "/" .. f)
-            end
-        end
-    end
-    if dirs then
-        for _, d in ipairs(dirs) do
-            includeDirRecursive(dir .. "/" .. d)
-        end
+local function LoadFile(path)
+    local name = string.GetFileFromFilename(path)
+    -- Ищет 'sv_', 'cl_', 'sh_' в начале или '_sv', '_cl', '_sh' перед .lua
+    local realm = string.match(name, "^([a-z]+)_") or string.match(name, "_([a-z]+)%.lua$")
+    
+    if realm == "sv" then
+        if SERVER then include(path) end
+    elseif realm == "cl" then
+        if SERVER then AddCSLuaFile(path) else include(path) end
+    else -- "sh" или файлы без явного префикса/суффикса
+        if SERVER then AddCSLuaFile(path) end
+        include(path)
     end
 end
-
+local function IncludeDirRecursive(dir)
+    local files, dirs = file.Find(dir .. "/*", "LUA")
+    for _, f in ipairs(files or {}) do
+        if string.EndsWith(f, ".lua") then LoadFile(dir .. "/" .. f) end
+    end
+    for _, d in ipairs(dirs or {}) do
+        IncludeDirRecursive(dir .. "/" .. d)
+    end
+end
 -- =========================================================
 -- Load base gamemode modules (your existing logic)
 -- =========================================================
