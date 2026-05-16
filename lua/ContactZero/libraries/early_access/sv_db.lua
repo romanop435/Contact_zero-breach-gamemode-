@@ -8,7 +8,7 @@ PLUGIN.PlayerInstances = PLUGIN.PlayerInstances or {}
 hook.Add("DatabaseConnected", "EarlyAccessCreateData", function()
 	local query
 
-	query = mysql:Create("hg_betatesters")
+	query = mysql:Create("cz_betatesters")
 		query:Create("steamid", "VARCHAR(20) NOT NULL")
 		query:Create("steam_name", "VARCHAR(32) NOT NULL")
 		query:PrimaryKey("steamid")
@@ -39,18 +39,18 @@ hook.Add("PlayerInitialSpawn","AddInWL",function(ply)
             return
         end 
 
-	    local query = mysql:Select("hg_betatesters")
+	    local query = mysql:Select("cz_betatesters")
 	    	query:Where("steamid", steamID64)
 	    	query:Callback(function(result)
 	    		if (IsValid(ply) and istable(result) and #result > 0) then
-	    			local updateQuery = mysql:Update("hg_betatesters")
+				local updateQuery = mysql:Update("cz_betatesters")
 	    				updateQuery:Update("steam_name", name)
 	    				updateQuery:Where("steamid", steamID64)
 	    			updateQuery:Execute()
 
 	    			PLUGIN.PlayerInstances[steamID64] = true
 	    		else
-	    			local insertQuery = mysql:Insert("hg_betatesters")
+				local insertQuery = mysql:Insert("cz_betatesters")
 	    				insertQuery:Insert("steamid", steamID64)
 	    				insertQuery:Insert("steam_name", name)
 	    			insertQuery:Execute()

@@ -38,8 +38,8 @@ local function IsScpCameraBlocked(ply)
 	return IsValid(ply) and ply:GetNWBool("CZ_IsSCP", false)
 end
 
-local hg_fov = ConVarExists("hg_fov") and GetConVar("hg_fov") or CreateClientConVar("hg_fov", "70", true, false, "changes fov to value", 75, 100)
-local hg_realismcam = ConVarExists("hg_realismcam") and GetConVar("hg_realismcam") or CreateClientConVar("hg_realismcam", "0", true, false, "realism camera", 0, 1)
+local cz_fov = ConVarExists("cz_fov") and GetConVar("cz_fov") or CreateClientConVar("cz_fov", "70", true, false, "changes fov to value", 75, 100)
+local cz_realismcam = ConVarExists("cz_realismcam") and GetConVar("cz_realismcam") or CreateClientConVar("cz_realismcam", "0", true, false, "realism camera", 0, 1)
 local cz_lerp_camera = ConVarExists("cz_lerp_camera") and GetConVar("cz_lerp_camera")
 	or CreateClientConVar("cz_lerp_camera", "1", true, false, "camera lerp multiplier", 0.2, 2)
 
@@ -135,7 +135,7 @@ function HGAddView(ply, origin, angles, velLen)
 		angles:Add(ang)
 		ViewPunch2(lerped_ang * 2)
 
-		if hg_realismcam:GetBool() then
+		if cz_realismcam:GetBool() then
 			//origin = origin + angle_difference_localvec2 * 100
 		end
 
@@ -207,8 +207,8 @@ local oldVechicleAng = Angle(0,0,0)
 local viewOverride
 local fixLerp = 0
 
-local hg_thirdperson = ConVarExists("hg_thirdperson") and GetConVar("hg_thirdperson") or CreateConVar("hg_thirdperson", 0, FCVAR_REPLICATED, "ragdoll combat", 0, 1)
-local hg_legacycam = ConVarExists("hg_legacycam") and GetConVar("hg_legacycam") or CreateConVar("hg_legacycam", 0, FCVAR_REPLICATED, "ragdoll combat", 0, 1)
+local cz_thirdperson = ConVarExists("cz_thirdperson") and GetConVar("cz_thirdperson") or CreateConVar("cz_thirdperson", 0, FCVAR_REPLICATED, "ragdoll combat", 0, 1)
+local cz_legacycam = ConVarExists("cz_legacycam") and GetConVar("cz_legacycam") or CreateConVar("cz_legacycam", 0, FCVAR_REPLICATED, "ragdoll combat", 0, 1)
 local lerpasad = 0
 
 hook.Remove("CalcView", "wac_air_calcview")
@@ -221,7 +221,7 @@ CalcView = function(ply, origin, angles, fov, znear, zfar)
 	if g_VR and g_VR.active then return end
 	if IsScpCameraBlocked(ply) then return end
 	
-	fov = hg_fov:GetInt()
+	fov = cz_fov:GetInt()
 	
 	if not IsValid(ply) then return end
 	local forceThirdperson = false
@@ -268,7 +268,7 @@ CalcView = function(ply, origin, angles, fov, znear, zfar)
 
 	local isSpectatingTarget = not lply:Alive() and lply:GetNWInt("viewmode", 0) == 1 and IsValid(lply:GetNWEntity("spect", NULL))
 	local firstPerson = GetViewEntity() == lply and not isSpectatingTarget
-	ply:ManipulateBoneScale(ply:LookupBone("ValveBiped.Bip01_Head1"), firstPerson and (not hg_thirdperson:GetBool() or hg_legacycam:GetBool() or lerpaim < 0.3) and vecZero or vecFull)
+	ply:ManipulateBoneScale(ply:LookupBone("ValveBiped.Bip01_Head1"), firstPerson and (not cz_thirdperson:GetBool() or cz_legacycam:GetBool() or lerpaim < 0.3) and vecZero or vecFull)
 	
 	hook.Run("HG_CalcView", ply, origin, angles, fov, znear, zfar)
 
@@ -278,7 +278,7 @@ CalcView = function(ply, origin, angles, fov, znear, zfar)
 
 	local tr, hullcheck, headm = hg.eyeTrace(ply)
 	
-	/*if hg_realismcam:GetBool() and ishgweapon(ply:GetActiveWeapon()) then
+	/*if cz_realismcam:GetBool() and ishgweapon(ply:GetActiveWeapon()) then
 		tr = hg.torsoTrace(ply)
 		local huy = angles[3]
 		angles = tr.Normal:Angle()
@@ -355,13 +355,13 @@ CalcView = function(ply, origin, angles, fov, znear, zfar)
 	--local angle = tr.Normal:Angle()
 	--angle[3] = angles[3]
 
-	if hg_thirdperson:GetBool() or forceThirdperson then
-		lerpaim = LerpCam(0.1, lerpaim, (not IsAimingNoScope(ply)) and 1 or (hg_legacycam:GetBool() and 1 or 0))
+	if cz_thirdperson:GetBool() or forceThirdperson then
+		lerpaim = LerpCam(0.1, lerpaim, (not IsAimingNoScope(ply)) and 1 or (cz_legacycam:GetBool() and 1 or 0))
 		leanmul1 = ((ply.lean < 0 and ply.lean * 2.2 or 0) + 1)
 		leanmul2 = ((ply.lean > 0 and ply.lean * 2.2 or 0) + 1)
 		origin = origin + ((angles:Forward() * -30 + angles:Right() * 15 * leanmul1) * lerpaim)
 		view = hook.Run("Camera", ply, view.origin, view.angles, view, vector_origin) or view
-		lerpasad = Lerp(0.1, lerpasad, ((IsAimingNoScope(ply) or hg_legacycam:GetBool()) and 0.001 or 1))
+		lerpasad = Lerp(0.1, lerpasad, ((IsAimingNoScope(ply) or cz_legacycam:GetBool()) and 0.001 or 1))
 
 		local pos = hg.eye(ply, 10, follow)
 		local ang = ply:EyeAngles()
@@ -380,7 +380,7 @@ CalcView = function(ply, origin, angles, fov, znear, zfar)
 
 	view.znear = 1
 	view.zfar = zfar
-	view.fov = math.Clamp(hg_fov:GetFloat(),75,100) + lerpfovadd
+	view.fov = math.Clamp(cz_fov:GetFloat(),75,100) + lerpfovadd
 	view.drawviewer = true--not hullcheck.Hit
 	view.origin = origin
 	view.angles = angles
@@ -533,7 +533,7 @@ local fliprtmat = CreateMaterial(
     }
 )
 
-local invertCam = CreateClientConVar("hg_cheats","0",false,false,"enable uselezz cheats",0,1)
+local invertCam = CreateClientConVar("cz_cheats","0",false,false,"enable uselezz cheats",0,1)
 
 hook.Add("HG.InputMouseApply","ASdInvert",function(tbl)
 	if invertCam:GetBool() then
@@ -549,7 +549,7 @@ hook.Add( "CreateMove", "flipmove", function( cmd )
 	end
 end)
 
-local hg_norenderoverride = ConVarExists("hg_norenderoverride") and GetConVar("hg_norenderoverride") or CreateClientConVar("hg_norenderoverride", 0, true, false, "if you have lags you can try turning that on", 0, 1)
+local cz_norenderoverride = ConVarExists("cz_norenderoverride") and GetConVar("cz_norenderoverride") or CreateClientConVar("cz_norenderoverride", 0, true, false, "if you have lags you can try turning that on", 0, 1)
 local mapswithfog = { -- Надо от сервер сайда сделать...
 	["gm_freespace_09_super_extended_night"] = 3500,
 	["gm_white_forest_countryside"] = 3500,
@@ -610,7 +610,7 @@ local function renderscene(pos, angle, fov)
 end
 
 
-cvars.AddChangeCallback( "hg_norenderoverride", function(cvar, old, new)
+cvars.AddChangeCallback( "cz_norenderoverride", function(cvar, old, new)
 	if tonumber(new) == 0 then
 		hook.Add("RenderScene", "jopa", renderscene)
 	else

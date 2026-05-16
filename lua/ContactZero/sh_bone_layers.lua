@@ -115,8 +115,8 @@ function angle:AngIsEqualTo(otherAng, huy)
 	return self:IsEqualTol(otherAng, huy)
 end
 
-local hg_anims_draw_distance = ConVarExists("hg_anims_draw_distance") and GetConVar("hg_anims_draw_distance") or CreateClientConVar("hg_anims_draw_distance", 1024, true, nil, "distance to draw anims (0 = infinite)", 0, 4096)
-local hg_anim_fps = ConVarExists("hg_anim_fps") and GetConVar("hg_anim_fps") or CreateClientConVar("hg_anim_fps", 66, true, nil, "fps to draw anims (0 = maximum fps available)", 0, 250)
+local cz_anims_draw_distance = ConVarExists("cz_anims_draw_distance") and GetConVar("cz_anims_draw_distance") or CreateClientConVar("cz_anims_draw_distance", 1024, true, nil, "distance to draw anims (0 = infinite)", 0, 4096)
+local cz_anim_fps = ConVarExists("cz_anim_fps") and GetConVar("cz_anim_fps") or CreateClientConVar("cz_anim_fps", 66, true, nil, "fps to draw anims (0 = maximum fps available)", 0, 250)
 
 local tolerance = 0.1
 
@@ -164,13 +164,13 @@ function hg.HomigradBones(ply, time, dtime)
 	if not IsValid(ply) or not ply:IsPlayer() or not ply:Alive() then return end
 
 	local dist = CLIENT and LocalPlayer():GetPos():Distance(ply:GetPos()) or 0
-	local drawdistance = CLIENT and hg_anims_draw_distance:GetInt() or 0
+	local drawdistance = CLIENT and cz_anims_draw_distance:GetInt() or 0
 	
 	if CLIENT and (not ply.shouldTransmit or ply.NotSeen) then return end
 
-	local dtime = (1 / hg_anim_fps:GetFloat())
+	local dtime = (1 / cz_anim_fps:GetFloat())
 	
-	if CLIENT and (hg_anim_fps:GetInt() != 0) and ((time - (ply.timeFrame or 0)) < dtime) then return end
+	if CLIENT and (cz_anim_fps:GetInt() != 0) and ((time - (ply.timeFrame or 0)) < dtime) then return end
 	if CLIENT then
 		dtime = time - (ply.timeFrame or 0)
 		ply.timeFrame = time

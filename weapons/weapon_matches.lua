@@ -80,12 +80,12 @@ function SWEP:Think()
 end
 
 if CLIENT then
-    hg_firematch = hg_firematch or {}
+    cz_firematch = cz_firematch or {}
     net.Receive("Mathces",function()
         local ent = net.ReadEntity()
         if not IsValid(ent) then return end
         local eff = ent:CreateParticleEffect("Lighter_flame",1,{PATTACH_CUSTOMORIGIN,ent,ent:GetPos()})
-        table.insert(hg_firematch,eff)
+        table.insert(cz_firematch,eff)
         eff:SetControlPoint(0, ent:GetPos()+ ent:GetForward() * 15)
         eff:StartEmission()
         timer.Simple(5,function()
@@ -96,7 +96,7 @@ if CLIENT then
         timer.Simple(6.5,function()
             if IsValid(eff) then
                 eff:StopEmissionAndDestroyImmediately()
-                table.RemoveByValue(hg_firematch,eff)
+                table.RemoveByValue(cz_firematch,eff)
             end
         end)
     end)

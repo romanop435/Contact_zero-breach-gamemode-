@@ -334,7 +334,7 @@ function SWEP:SetHandPos(noset)
 	if !IsValid(wm) then return end
 
 	local inv = ply:GetNetVar("Inventory",{})
-	local havekastet = inv["Weapons"] and inv["Weapons"]["hg_brassknuckles"]
+	local havekastet = inv["Weapons"] and inv["Weapons"]["cz_brassknuckles"]
 
 	if havekastet then
 		self.model = IsValid(self.model) and self.model or ClientsideModel(self.KnuckleModel)
@@ -777,7 +777,7 @@ function SWEP:ApplyForce()
 			end
 		end
 
-		if self.CarryEnt:GetClass() == "ent_hg_cyanide_canister" then
+		if self.CarryEnt:GetClass() == "ent_cz_cyanide_canister" then
 			ply.Guilt = math.max(ply.Guilt, 5)
 		end
 
@@ -1100,7 +1100,7 @@ function SWEP:PrimaryAttack(forcespecial)
 	local twohands = (ply:GetNetVar("carrymass",0) ~= 0 and ply:GetNetVar("carrymass",0) or ply:GetNetVar("carrymass2",0)) > 15
 
 	local inv = ply:GetNetVar("Inventory",{})
-	local havekastet = inv["Weapons"] and inv["Weapons"]["hg_brassknuckles"]
+	local havekastet = inv["Weapons"] and inv["Weapons"]["cz_brassknuckles"]
 
 	if rand or (CLIENT and ((self:GetOwner():GetTable().ChatGestureWeight >= 0.1) or twohands)) or havekastet then
 		side = "fists_right"
@@ -1182,7 +1182,7 @@ function SWEP:AttackFront(special_attack,rand)
 		end
 
 		local inv = owner:GetNetVar("Inventory",{})
-		local havekastet = inv["Weapons"] and inv["Weapons"]["hg_brassknuckles"]
+		local havekastet = inv["Weapons"] and inv["Weapons"]["cz_brassknuckles"]
 		local SelfForce, Mul = 150, 1 * (havekastet and 1.7 or 1)
 		if self:IsEntSoft(Ent) then
 			SelfForce = 25

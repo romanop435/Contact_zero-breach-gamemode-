@@ -98,7 +98,7 @@ function SWEP:DoPoison(tr)
 
     owner:EmitSound("physics/metal/soda_can_impact_hard2.wav",40)
 	
-	local ent = ents.Create("ent_hg_cyanide_canister")
+	local ent = ents.Create("ent_cz_cyanide_canister")
 	ent:SetPos(tr.HitPos)
 	ent:Spawn()
 

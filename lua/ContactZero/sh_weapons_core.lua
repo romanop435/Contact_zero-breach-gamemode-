@@ -60,25 +60,25 @@ function hg.EnsureOrganism(ply)
 end
 
 if SERVER then
-	hook.Add("PlayerInitialSpawn", "hg_weapons_org_init", function(ply)
+	hook.Add("PlayerInitialSpawn", "cz_weapons_org_init", function(ply)
 		hg.EnsureOrganism(ply)
 	end)
 
-	hook.Add("PlayerSpawn", "hg_weapons_org_spawn", function(ply)
+	hook.Add("PlayerSpawn", "cz_weapons_org_spawn", function(ply)
 		hg.EnsureOrganism(ply)
 		if not ply:HasWeapon("weapon_hands_sh") then
 			ply:Give("weapon_hands_sh")
 		end
 	end)
 else
-	hook.Add("InitPostEntity", "hg_weapons_org_local", function()
+	hook.Add("InitPostEntity", "cz_weapons_org_local", function()
 		local ply = LocalPlayer()
 		if IsValid(ply) then
 			hg.EnsureOrganism(ply)
 		end
 	end)
 
-	hook.Add("OnEntityCreated", "hg_weapons_org_client", function(ent)
+	hook.Add("OnEntityCreated", "cz_weapons_org_client", function(ent)
 		if not IsValid(ent) or not ent:IsPlayer() then return end
 		timer.Simple(0, function()
 			if IsValid(ent) then
@@ -89,8 +89,8 @@ else
 end
 
 if CLIENT then
-	hg.ConVars.potatopc = GetConVar("hg_potatopc") or CreateClientConVar(
-		"hg_potatopc",
+	hg.ConVars.potatopc = GetConVar("cz_potatopc") or CreateClientConVar(
+		"cz_potatopc",
 		"0",
 		true,
 		false,
@@ -101,26 +101,26 @@ if CLIENT then
 end
 
 if SERVER then
-	util.AddNetworkString("hg_keydown_sync")
+	util.AddNetworkString("cz_keydown_sync")
 
 	local function send_key(ply, key, down)
 		if not IsValid(ply) then return end
-		net.Start("hg_keydown_sync")
+		net.Start("cz_keydown_sync")
 		net.WriteEntity(ply)
 		net.WriteInt(key, 16)
 		net.WriteBool(down)
 		net.Broadcast()
 	end
 
-	hook.Add("KeyPress", "hg_keydown_sync", function(ply, key)
+	hook.Add("KeyPress", "cz_keydown_sync", function(ply, key)
 		send_key(ply, key, true)
 	end)
 
-	hook.Add("KeyRelease", "hg_keydown_sync", function(ply, key)
+	hook.Add("KeyRelease", "cz_keydown_sync", function(ply, key)
 		send_key(ply, key, false)
 	end)
 else
-	net.Receive("hg_keydown_sync", function()
+	net.Receive("cz_keydown_sync", function()
 		local ply = net.ReadEntity()
 		local key = net.ReadInt(16)
 		local down = net.ReadBool()
@@ -283,8 +283,8 @@ function hg.torsoTrace(ply, dist, ent, aim_vector)
 end
 
 if CLIENT then
-	local tpik_distance = GetConVar("hg_tpik_distance") or CreateClientConVar(
-		"hg_tpik_distance",
+	local tpik_distance = GetConVar("cz_tpik_distance") or CreateClientConVar(
+		"cz_tpik_distance",
 		"1024",
 		true,
 		false,

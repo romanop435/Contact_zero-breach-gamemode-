@@ -522,8 +522,8 @@ end
 
 local cached_huy = {}
 
-local hg_coolgloves = ConVarExists("hg_coolgloves") and GetConVar("hg_coolgloves") or CreateClientConVar("hg_coolgloves", 0, true, false, "Enable cool gloves (only firstperson) (laggy)", 0, 1)
-local hg_change_gloves = ConVarExists("hg_change_gloves") and GetConVar("hg_change_gloves") or CreateClientConVar("hg_change_gloves", 1, true, false, "Change cool gloves model (only with hg_coolgloves enabled)", 1, 3)
+local cz_coolgloves = ConVarExists("cz_coolgloves") and GetConVar("cz_coolgloves") or CreateClientConVar("cz_coolgloves", 0, true, false, "Enable cool gloves (only firstperson) (laggy)", 0, 1)
+local cz_change_gloves = ConVarExists("cz_change_gloves") and GetConVar("cz_change_gloves") or CreateClientConVar("cz_change_gloves", 1, true, false, "Change cool gloves model (only with cz_coolgloves enabled)", 1, 3)
 
 local niggabones = {
     ["ValveBiped.Bip01_R_Finger4"] = "ValveBiped.Bip01_R_Finger2",
@@ -610,7 +610,7 @@ function hg.MainTPIKFunction(ent, ply, wpn)
         //print("DoTPIK: ", SysTime() - systime)
     end
 
-    if not hg_coolgloves:GetBool() then return end
+    if not cz_coolgloves:GetBool() then return end
     local huy = (GetViewEntity() == ply) or (not LocalPlayer():Alive() and LocalPlayer():GetNWEntity("spect") == ply and LocalPlayer():GetNWInt("viewmode",0) == 1)
     
     if ply.GetPlayerClass and ply:GetPlayerClass() and ply:GetPlayerClass().NoGloves then return end
@@ -618,7 +618,7 @@ function hg.MainTPIKFunction(ent, ply, wpn)
     if not huy then return end
 
     if not IsValid(ply.c_hands) then
-        ply.c_hands = ClientsideModel(gloves[hg_change_gloves:GetInt()])
+        ply.c_hands = ClientsideModel(gloves[cz_change_gloves:GetInt()])
         ply.c_hands:SetNoDraw(true)
         ply.c_hands:SetPos(ply:EyePos())
         ply.c_hands:SetParent(ply)
@@ -630,7 +630,7 @@ function hg.MainTPIKFunction(ent, ply, wpn)
     local mdl = ply.c_hands
     mdl:SetSequence(2)
     mdl:SetCycle(1)--TRI TOPORA
-    mdl:SetModel(gloves[hg_change_gloves:GetInt()])
+    mdl:SetModel(gloves[cz_change_gloves:GetInt()])
 	mdl:SetBodygroup(1, 1)
 	mdl:SetBodygroup(2, 1)
     mdl:SetPos(ent:GetPos())
@@ -809,7 +809,7 @@ end)
 function hg.FlashlightPos(ply)
     if not IsValid(ply) or not ply:IsPlayer() then return end
     if not ply:GetNetVar("flashlight",false) then if IsValid(ply.flashlight) then ply.flashlight:Remove() end return end
-    if not ply:GetNetVar("Inventory") or not ply:GetNetVar("Inventory")["Weapons"] or not ply:GetNetVar("Inventory")["Weapons"]["hg_flashlight"] then if IsValid(ply.flashlight) then ply.flashlight:Remove() end if IsValid(ply.flmodel) then ply.flmodel:SetNoDraw(true) end return end
+    if not ply:GetNetVar("Inventory") or not ply:GetNetVar("Inventory")["Weapons"] or not ply:GetNetVar("Inventory")["Weapons"]["cz_flashlight"] then if IsValid(ply.flashlight) then ply.flashlight:Remove() end if IsValid(ply.flmodel) then ply.flmodel:SetNoDraw(true) end return end
     
     local wep = ply:GetActiveWeapon()
     local flashlightwep

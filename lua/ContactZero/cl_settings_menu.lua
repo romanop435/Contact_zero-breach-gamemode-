@@ -5,11 +5,11 @@ if not hg.Breach then
 	include("ContactZero/breach/sh_breach.lua")
 end
 
-local hg_font = ConVarExists("hg_font") and GetConVar("hg_font")
-	or CreateClientConVar("hg_font", "Bahnschrift", true, false, "ui font")
+local cz_font = ConVarExists("cz_font") and GetConVar("cz_font")
+	or CreateClientConVar("cz_font", "Bahnschrift", true, false, "ui font")
 
 local function uiFont()
-	local font = hg_font:GetString()
+	local font = cz_font:GetString()
 	if font == "" then
 		font = "Bahnschrift"
 	end
@@ -395,8 +395,8 @@ function CZ_SettingsMenu.Open()
 	addCategory("sound", "Звук", function(panel)
 		addSection(panel, "Окружение")
 		addSlider(panel, "Громкость амбиента", "cz_ambient_volume", 0, 1, 2)
-		if ConVarExists("hg_dmusic") then
-			addCheckbox(panel, "Динамическая музыка", "hg_dmusic", "Фоновая музыка по ситуации")
+		if ConVarExists("cz_dmusic") then
+			addCheckbox(panel, "Динамическая музыка", "cz_dmusic", "Фоновая музыка по ситуации")
 		end
 	end)
 

@@ -21,11 +21,11 @@ if not hg.Breach then
 end
 local BR = hg.Breach
 
-local hg_font = ConVarExists( "hg_font" ) and GetConVar( "hg_font" ) or CreateClientConVar( "hg_font", "Bahnschrift", true, false, "ui font" )
+local cz_font = ConVarExists( "cz_font" ) and GetConVar( "cz_font" ) or CreateClientConVar( "cz_font", "Bahnschrift", true, false, "ui font" )
 local function ScoreFont()
     local usefont = "Bahnschrift"
-    if hg_font:GetString() ~= "" then
-        usefont = hg_font:GetString()
+    if cz_font:GetString() ~= "" then
+        usefont = cz_font:GetString()
     end
     return usefont
 end

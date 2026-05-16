@@ -8,7 +8,7 @@ ACH.achievements_data.created_achevements = ACH.achievements_data.created_acheve
 
 ACH.MenuPanel = ACH.MenuPanel or nil
 
-concommand.Add("hg_achievements", function()
+concommand.Add("cz_achievements", function()
     if ACH.OpenMenu then
         ACH.OpenMenu()
     end
@@ -185,7 +185,7 @@ end)
 ACH.NewAchievements = ACH.NewAchievements or {}
 local AchTable = ACH.NewAchievements
 
-net.Receive("hg_NewAchievement", function()
+net.Receive("cz_NewAchievement", function()
     local Ach = {time = CurTime() + 6.5, name = net.ReadString(), img = net.ReadString()}
     table.insert(AchTable, 1, Ach)
     surface.PlaySound("garrysmod/achievement_earned.wav")

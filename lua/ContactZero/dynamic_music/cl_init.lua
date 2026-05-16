@@ -58,9 +58,9 @@ function DMusic:Stop()
     DMusic.threaded = 0
 end
 
-local hg_sound = ConVarExists("hg_dmusic") and GetConVar("hg_dmusic") or CreateClientConVar("hg_dmusic","1",true,false,"Enable dynamic music (Enable music in gmod settings)",0,1)
+local cz_sound = ConVarExists("cz_dmusic") and GetConVar("cz_dmusic") or CreateClientConVar("cz_dmusic","1",true,false,"Enable dynamic music (Enable music in gmod settings)",0,1)
 
-concommand.Add("hg_dmusic_skip",function()
+concommand.Add("cz_dmusic_skip",function()
     if not DMusic.Tracks then return end 
     for adr,song in pairs(DMusic.Tracks) do
         song[3] = false
@@ -93,7 +93,7 @@ hook.Add( "Think", "DMusic.Think", function()
             DMusic.threaded >= adr and 
             ply:Alive() and not 
             ply.organism.otrub and
-            hg_sound:GetBool() and 
+            cz_sound:GetBool() and
             (song[3]) 
         then
             if song[1]:GetTime() > song[1]:GetLength() - 1 then
