@@ -3,10 +3,10 @@ if engine.ActiveGamemode() ~= "realism" then
 end
 if CLIENT then
 	lply = LocalPlayer()
-	hook.Add("InitPostEntity", "hg_cache_lply", function()
+	hook.Add("InitPostEntity", "cz_cache_lply", function()
 		lply = LocalPlayer()
 	end)
-	hook.Add("Think", "hg_cache_lply", function()
+	hook.Add("Think", "cz_cache_lply", function()
 		if not IsValid(lply) then
 			lply = LocalPlayer()
 		end
@@ -935,14 +935,14 @@ if CLIENT then
 		print("\n")
 	end
 
-	local hg_tpik_distance = ConVarExists("hg_tpik_distance") and GetConVar("hg_tpik_distance") or CreateClientConVar("hg_tpik_distance",1024,true,false,"The distance (in hammer units) at which the third person inverse kinematics enables, 0 = inf",0,2048)
+	local cz_tpik_distance = ConVarExists("cz_tpik_distance") and GetConVar("cz_tpik_distance") or CreateClientConVar("cz_tpik_distance",1024,true,false,"The distance (in hammer units) at which the third person inverse kinematics enables, 0 = inf",0,2048)
 
 	local render_GetViewSetup = render.GetViewSetup
 	function hg.ShouldTPIK(ply,wpn)
 		local time = CurTime()
 		if (ply.cachedtpik or 0) > time then return ply.cachedval end
 		ply.cachedtpik = time + 0.1
-		local int = hg_tpik_distance:GetInt()
+		local int = cz_tpik_distance:GetInt()
 		if (int == 0 or ply == LocalPlayer() or ply == LocalPlayer():GetNWEntity("spect")) then ply.cachedval = true return true end
 		local view = render.GetViewSetup(true)
 		if (ply:GetPos():DistToSqr(view.origin) > int*int) then ply.cachedval = false return false end
@@ -2004,8 +2004,8 @@ if CLIENT then
 		[ "$pp_colour_mulb" ] = 0
 	}
 
-	local hg_potatopc = GetConVar("hg_potatopc") or CreateClientConVar("hg_potatopc", "0", true, false, "enable this if you are noob", 0, 1)
-	hg.ConVars.potatopc = hg_potatopc
+	local cz_potatopc = GetConVar("cz_potatopc") or CreateClientConVar("cz_potatopc", "0", true, false, "enable this if you are noob", 0, 1)
+	hg.ConVars.potatopc = cz_potatopc
 	local mata = Material("pp/blurscreen")
 	local vignetteMat = Material( "effects/shaders/zb_vignette" )
 	hook.Remove("RenderScreenspaceEffects","SIB_Suppresss",function()
@@ -2038,7 +2038,7 @@ if CLIENT then
 			DrawColorModify(colormodify)
 		end
 
-		if !hg_potatopc:GetBool() then DrawToyTown(fraction,ScrH() * fraction / 1.5) end
+		if !cz_potatopc:GetBool() then DrawToyTown(fraction,ScrH() * fraction / 1.5) end
 
 		--DrawSharpen(8,SIB_suppress.Force / 7)
 	end)
@@ -2464,7 +2464,7 @@ local function randomGesture()
 end
 
 if CLIENT then
-	concommand.Add("hg_randomgesture",function()
+	concommand.Add("cz_randomgesture",function()
 		randomGesture()
 	end)
 end
@@ -2984,7 +2984,7 @@ function hg.PrecacheSoundsSWEP(self)
 end
 
 if CLIENT then
-	local hg_zoomsensitivity = ConVarExists("hg_zoomsensitivity") and GetConVar("hg_zoomsensitivity") or CreateConVar("hg_zoomsensitivity", 1, FCVAR_ARCHIVE, "aiming zoom sensitifity multiplier", 0, 3)
+	local cz_zoomsensitivity = ConVarExists("cz_zoomsensitivity") and GetConVar("cz_zoomsensitivity") or CreateConVar("cz_zoomsensitivity", 1, FCVAR_ARCHIVE, "aiming zoom sensitifity multiplier", 0, 3)
 end
 
 local cheats = GetConVar( "sv_cheats" )
@@ -3090,7 +3090,7 @@ hook.Add("PlayerSwitchFlashlight", "removeflashlights", function(ply, enabled)
 
 	if not flashlightwep then --custom flashlight
 		local inv = ply:GetNetVar("Inventory",{})
-		if inv and inv["Weapons"] and inv["Weapons"]["hg_flashlight"] and enabled then
+		if inv and inv["Weapons"] and inv["Weapons"]["cz_flashlight"] and enabled then
 			hg.GetCurrentCharacter(ply):EmitSound("items/flashlight1.wav",65)
 			ply:SetNetVar("flashlight",not ply:GetNetVar("flashlight"))
 			--return true
@@ -3189,7 +3189,7 @@ function hg.CanUseLeftHand(ply)
 
 	local inv = ply:GetNetVar("Inventory")
 		
-	local noSling = inv and (not inv["Weapons"] or not inv["Weapons"]["hg_sling"])
+	local noSling = inv and (not inv["Weapons"] or not inv["Weapons"]["cz_sling"])
 
 	local deploying = wep and (wep.deploy and (wep.deploy - CurTime()) > (wep.CooldownDeploy / 2) or wep.holster and (wep.holster - CurTime()) < (wep.CooldownHolster / 2))
 	--print(wep:IsPistolHoldType())
@@ -3405,7 +3405,7 @@ if CLIENT then
 	local render_GetViewSetup = render.GetViewSetup
 	LocalPlayerSeen = true
 	hg.seenents = {}
-	local hg_fov = GetConVar("hg_fov")
+	local cz_fov = GetConVar("cz_fov")
 
 	local math_cos = math.cos
 	local math_rad = math.rad
@@ -3453,7 +3453,7 @@ if CLIENT then
 			local vSize = (point - vPos):GetNormalized() * len
 
 			local diff = (vPos + vSize - origin):GetNormalized()
-			if !v.shouldTransmit or (angles:Forward():Dot(diff) <= math_cos(math_rad(hg_fov:GetInt()))) then
+			if !v.shouldTransmit or (angles:Forward():Dot(diff) <= math_cos(math_rad(cz_fov:GetInt()))) then
 				if not nochange then v.NotSeen = true end
 				if v == lply then LocalPlayerSeen = false end
 			else
@@ -3629,7 +3629,7 @@ if CLIENT then
 	local windsnd = false
 	local windsndsec = false
 	--local DEBIL_ANGLE = Angle(0,0,0)
-	hook.Add("SetupMove","hg_FallSound",function()
+	hook.Add("SetupMove","cz_FallSound",function()
 		local ply = LocalPlayer()
 		if not IsValid(ply) then return end
 		lply = ply
@@ -3707,7 +3707,7 @@ if CLIENT then
 end
 
 if SERVER then
-	hook.Add("SetupMove","hg_FallSound",function(ply)
+	hook.Add("SetupMove","cz_FallSound",function(ply)
 		--if not ply then return end
 		local ent = IsValid(ply.FakeRagdoll) and ply.FakeRagdoll or ply
 		local vel = ent:GetVelocity():Length()
@@ -3738,13 +3738,13 @@ timer.Simple(5,function()
 end)
 
 hook.Add( "PlayerGiveSWEP", "BlockPlayerSWEPs", function( ply, class, spawninfo )
-	if ( not ply:IsAdmin() and (class == "weapon_hg_rpg" or class == "weapon_ags_30_handheld" or class == "weapon_kord") ) then
+	if ( not ply:IsAdmin() and (class == "weapon_cz_rpg" or class == "weapon_ags_30_handheld" or class == "weapon_kord") ) then
 		return false
 	end
 end )
 
 hook.Add( "PlayerSpawnSWEP", "BlockPlayerSWEPs", function( ply, class, spawninfo )
-	if ( not ply:IsAdmin() and (class == "weapon_hg_rpg" or class == "weapon_ags_30_handheld" or class == "weapon_kord") ) then
+	if ( not ply:IsAdmin() and (class == "weapon_cz_rpg" or class == "weapon_ags_30_handheld" or class == "weapon_kord") ) then
 		return false
 	end
 end )
@@ -3996,7 +3996,7 @@ end
 --				if tr.MatType == MAT_SNOW then
 --					ply:EmitSound("player/footsteps/snow1.wav",65,math.Rand(90,110))
 --					ply.SnowBallPickupCD = CurTime() + 1 
---					ply:Give("weapon_hg_snowball")
+--					ply:Give("weapon_cz_snowball")
 --				end
 --			end
 --		end )
@@ -4217,5 +4217,6 @@ if CLIENT then
 	end)
 end
 
-local hg_ragdollcombat = ConVarExists("hg_ragdollcombat") and GetConVar("hg_ragdollcombat") or CreateConVar("hg_ragdollcombat", 0, FCVAR_REPLICATED, "ragdoll combat", 0, 1)
-local hg_thirdperson = ConVarExists("hg_thirdperson") and GetConVar("hg_thirdperson") or CreateConVar("hg_thirdperson", 0, FCVAR_REPLICATED, "thirdperson combat", 0, 1)
+local cz_ragdollcombat = ConVarExists("cz_ragdollcombat") and GetConVar("cz_ragdollcombat") or CreateConVar("cz_ragdollcombat", 0, FCVAR_REPLICATED, "ragdoll combat", 0, 1)
+local cz_thirdperson = ConVarExists("cz_thirdperson") and GetConVar("cz_thirdperson") or CreateConVar("cz_thirdperson", 0, FCVAR_REPLICATED, "thirdperson combat", 0, 1)
+include("ContactZero/inventory/init.lua")

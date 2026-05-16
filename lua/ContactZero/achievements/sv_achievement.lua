@@ -97,7 +97,7 @@ local function isAchievementCompleted(ply, key, val)
     return val >= ach.needed_value and current < ach.needed_value
 end
 
-util.AddNetworkString("hg_NewAchievement")
+util.AddNetworkString("cz_NewAchievement")
 
 function ACH.SetPlayerAchievement(ply, key, val)
     if not IsValid(ply) or not ply:IsPlayer() then return end
@@ -107,7 +107,7 @@ function ACH.SetPlayerAchievement(ply, key, val)
     if isAchievementCompleted(ply, key, val) then
         local ach = ACH.achievements_data.created_achevements[key]
         if ach then
-            net.Start("hg_NewAchievement")
+            net.Start("cz_NewAchievement")
                 net.WriteString(ach.name)
                 net.WriteString(ach.img)
             net.Send(ply)

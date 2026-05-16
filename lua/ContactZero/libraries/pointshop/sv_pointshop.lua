@@ -7,7 +7,7 @@ PLUGIN.PlayerInstances = PLUGIN.PlayerInstances or {}
 hook.Add("DatabaseConnected", "PointshopCreateData", function()
 	local query
 
-	query = mysql:Create("hg_pointshop")
+	query = mysql:Create("cz_pointshop")
 		query:Create("steamid", "VARCHAR(20) NOT NULL")
 		query:Create("steam_name", "VARCHAR(32) NOT NULL")
 		query:Create("donpoints", "FLOAT NOT NULL")
@@ -35,14 +35,14 @@ hook.Add( "PlayerInitialSpawn","Pointshop_OnInitSpawn", function( ply )
         return
     end 
 
-	local query = mysql:Select("hg_pointshop")
+	local query = mysql:Select("cz_pointshop")
 		query:Select("donpoints")
 		query:Select("points")
         query:Select("items")
 		query:Where("steamid", steamID64)
 		query:Callback(function(result)
 			if (IsValid(ply) and istable(result) and #result > 0 and result[1].donpoints) then
-				local updateQuery = mysql:Update("hg_pointshop")
+				local updateQuery = mysql:Update("cz_pointshop")
 					updateQuery:Update("steam_name", name)
 					updateQuery:Where("steamid", steamID64)
 				updateQuery:Execute()
@@ -53,7 +53,7 @@ hook.Add( "PlayerInitialSpawn","Pointshop_OnInitSpawn", function( ply )
                 PLUGIN.PlayerInstances[steamID64].points = tonumber(result[1].points)
                 PLUGIN.PlayerInstances[steamID64].items = util.JSONToTable(result[1].items)
 			else
-				local insertQuery = mysql:Insert("hg_pointshop")
+				local insertQuery = mysql:Insert("cz_pointshop")
 					insertQuery:Insert("steamid", steamID64)
 					insertQuery:Insert("steam_name", name)
 					insertQuery:Insert("donpoints", 0)
@@ -100,7 +100,7 @@ function plyMeta:PS_SetPoints( value )
 	local steamID64 = self:SteamID64()
     local pointshopVars = self:GetPointshopVars()
 
-    local updateQuery = mysql:Update("hg_pointshop")
+    local updateQuery = mysql:Update("cz_pointshop")
 		updateQuery:Update("points", value)
 		updateQuery:Where("steamid", steamID64)
 	updateQuery:Execute()
@@ -147,7 +147,7 @@ function plyMeta:PS_SetDPoints( value )
 	local steamID64 = self:SteamID64()
     local pointshopVars = self:GetPointshopVars()
 
-    local updateQuery = mysql:Update("hg_pointshop")
+    local updateQuery = mysql:Update("cz_pointshop")
 		updateQuery:Update("donpoints", value)
 		updateQuery:Where("steamid", steamID64)
 	updateQuery:Execute()
@@ -177,7 +177,7 @@ function plyMeta:PS_SetItems( tItems )
     local steamID64 = self:SteamID64()
     local pointshopVars = {}
 
-    //local updateQuery = mysql:Update("hg_pointshop")
+    //local updateQuery = mysql:Update("cz_pointshop")
 	//	updateQuery:Update("items", util.TableToJSON(tItems))
 	//	updateQuery:Where("steamid", steamID64)
 	//updateQuery:Execute()
@@ -202,18 +202,18 @@ end
 
 -- networking and other
 
-util.AddNetworkString("hg_pointshop_net")
+util.AddNetworkString("cz_pointshop_net")
 
 function PLUGIN:NET_SendPointShopVars( ply )
 
-    net.Start( "hg_pointshop_net" )
+    net.Start( "cz_pointshop_net" )
         net.WriteTable( ply:GetPointshopVars() )
     net.Send( ply )
 end
 
 --PLUGIN:NET_SendPointShopVars( Player(2) )
 
-util.AddNetworkString("hg_pointshop_send_notificate")
+util.AddNetworkString("cz_pointshop_send_notificate")
 
 function PLUGIN:NET_BuyItem( ply, uid )
     if not util.IsBinaryModuleInstalled("mysqloo") then return end
@@ -229,7 +229,7 @@ function PLUGIN:NET_BuyItem( ply, uid )
         yes, reason = ply:PS_TakePoints(hg.PointShop.Items[uid].PRICE, function() ply:PS_AddItem( uid ) end)
     end
     
-    net.Start( "hg_pointshop_send_notificate" )
+    net.Start( "cz_pointshop_send_notificate" )
         net.WriteString(reason)
     net.Send( ply )
 
@@ -240,7 +240,7 @@ function PLUGIN:NET_GetBuyedItems( ply )
     PLUGIN:NET_SendPointShopVars( ply )
 end
 
-net.Receive("hg_pointshop_net",function( _, ply )
+net.Receive("cz_pointshop_net",function( _, ply )
     local str = net.ReadString()
     local funcstring = PLUGIN[ "NET_" .. str ]
 
@@ -253,6 +253,6 @@ end)
 
 hook.Add("PlayerSay","OpenPointShop",function(ply,txt)
     if txt == "!pointshop" then
-        ply:ConCommand("hg_pointshop")
+        ply:ConCommand("cz_pointshop")
     end
 end)

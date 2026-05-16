@@ -99,7 +99,7 @@ function SWEP:SetCharge(Tr)
 	if CLIENT then return end
 	local owner = self:GetOwner()
 	if IsValid(Tr.Entity) then
-		local charge = ents.Create("ent_hg_breachcharge")
+		local charge = ents.Create("ent_cz_breachcharge")
 		local ang = Tr.HitNormal:Angle()
 		ang:RotateAroundAxis(ang:Forward(), 90)
 		ang:RotateAroundAxis(ang:Right(), -90)

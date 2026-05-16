@@ -2,13 +2,13 @@
 hg.PointShop = hg.PointShop or {}
 
 local blur = Material("pp/blurscreen")
-local hg_potatopc
+local cz_potatopc
 function hg.DrawBlur(panel, amount, passes, alpha)
 	if is3d2d then return end
 	amount = amount or 5
-	hg_potatopc = hg_potatopc or hg.ConVars.potatopc
+	cz_potatopc = cz_potatopc or hg.ConVars.potatopc
 
-	if(hg_potatopc:GetBool())then
+	if(cz_potatopc:GetBool())then
 		surface.SetDrawColor(0, 0, 0, alpha or (amount * 20))
 		surface.DrawRect(0, 0, panel:GetWide(), panel:GetTall())
 	else
@@ -357,7 +357,7 @@ end
 
 vgui.Register( "HG_PointShop", PANEL, "ZFrame")
 
-concommand.Add("hg_pointshop",function()
+concommand.Add("cz_pointshop",function()
     PLUGIN:SendNET( "SendPointShopVars", nil, function( data )
         if PLUGIN.MenuPanel then
             PLUGIN.MenuPanel:Remove()

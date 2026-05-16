@@ -31,7 +31,7 @@ end
 if CLIENT then
     local callbacks = {}
 
-    net.Receive("hg_pointshop_net",function()
+    net.Receive("cz_pointshop_net",function()
         LocalPlayer().PS_MyItensens = net.ReadTable()
         --print(callbacks[#callbacks])
         if callbacks[#callbacks] then
@@ -41,7 +41,7 @@ if CLIENT then
     end)
 
     function PLUGIN:SendNET(strFunc,tVars,callback)
-        net.Start( "hg_pointshop_net" )
+        net.Start( "cz_pointshop_net" )
             net.WriteString( strFunc )
             net.WriteTable( tVars or {} )
         net.SendToServer()
@@ -57,7 +57,7 @@ if CLIENT then
         return false
     end
 
-    net.Receive("hg_pointshop_send_notificate",function()
+    net.Receive("cz_pointshop_send_notificate",function()
         local txt = net.ReadString()
         sound.PlayURL("https://www.myinstants.com/media/sounds/short-notice.mp3","mono",function() Derma_Message(txt, "Result", "OK") end)
     end)

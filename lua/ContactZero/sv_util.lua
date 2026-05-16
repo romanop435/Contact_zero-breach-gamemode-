@@ -4,7 +4,7 @@
 local getBloodColor = FindMetaTable( "Entity" ).GetBloodColor
 local isBulletDamage = FindMetaTable( "CTakeDamageInfo" ).IsBulletDamage
 
-local hg_legacycam = ConVarExists("hg_legacycam") and GetConVar("hg_legacycam") or CreateConVar("hg_legacycam", 0, FCVAR_REPLICATED, "ragdoll combat", 0, 1)
+local cz_legacycam = ConVarExists("cz_legacycam") and GetConVar("cz_legacycam") or CreateConVar("cz_legacycam", 0, FCVAR_REPLICATED, "ragdoll combat", 0, 1)
 
 local host_timescale = game.GetTimeScale
 
@@ -136,9 +136,9 @@ end
 
 -- зак придэ порядок наведЭ
 
-local realismMode = CreateConVar( "hg_fullrealismmode", "1", FCVAR_SERVER_CAN_EXECUTE, "huy", 0, 1 )
+local realismMode = CreateConVar( "cz_fullrealismmode", "1", FCVAR_SERVER_CAN_EXECUTE, "huy", 0, 1 )
 
-cvars.AddChangeCallback("hg_fullrealismmode", function(convar_name, value_old, value_new)
+cvars.AddChangeCallback("cz_fullrealismmode", function(convar_name, value_old, value_new)
     SetGlobalBool("FullRealismMode",realismMode:GetBool())
 end)
 
@@ -158,7 +158,7 @@ hook.Add("Player Think", "homigrad-dropholstered", function(ply)
     --local inv = ply:GetNetVar("Inventory")
     local activewep = ply:GetActiveWeapon()
     for i,wep in ipairs(ply:GetWeapons()) do
-        if wep.NoHolster and activewep ~= wep and wep.picked then --and not inv["Weapons"]["hg_sling"]
+        if wep.NoHolster and activewep ~= wep and wep.picked then --and not inv["Weapons"]["cz_sling"]
             ply:DropWeapon(wep)
         end
     end
@@ -381,11 +381,11 @@ hook.Add("Player Death", "FLASHLIGHTHUY", function(ply)
     ply:SetNetVar("flashlight",false)
 end)
 
-concommand.Add("hg_dropflashlight",function(ply)
+concommand.Add("cz_dropflashlight",function(ply)
     if not ply:Alive() then return end
     local inv = ply:GetNetVar("Inventory")
-    if not inv["Weapons"]["hg_flashlight"] then return end
-    local ent = ents.Create("hg_flashlight")
+    if not inv["Weapons"]["cz_flashlight"] then return end
+    local ent = ents.Create("cz_flashlight")
     ent:SetPos(ply:EyePos())
     ent:SetAngles(ply:EyeAngles())
     ent:Spawn()
@@ -395,16 +395,16 @@ concommand.Add("hg_dropflashlight",function(ply)
         phys:ApplyForceCenter(ply:GetAimVector() * 150 * phys:GetMass())
     end
     ply:SetNetVar("flashlight",false)
-    inv["Weapons"]["hg_flashlight"] = nil
+    inv["Weapons"]["cz_flashlight"] = nil
     ply:SetNetVar("Inventory",inv)
     --hook.Run("PlayerSwitchFlashlight",ply,false)
 end)
 
-concommand.Add("hg_dropsling",function(ply)
+concommand.Add("cz_dropsling",function(ply)
     if not ply:Alive() then return end
     local inv = ply:GetNetVar("Inventory")
-    if not inv["Weapons"] or not inv["Weapons"]["hg_sling"] then return end
-    local ent = ents.Create("hg_sling")
+    if not inv["Weapons"] or not inv["Weapons"]["cz_sling"] then return end
+    local ent = ents.Create("cz_sling")
     ent:SetPos(ply:EyePos())
     ent:SetAngles(ply:EyeAngles())
     ent:Spawn()
@@ -413,7 +413,7 @@ concommand.Add("hg_dropsling",function(ply)
     if IsValid(phys) then
         phys:ApplyForceCenter(ply:GetAimVector() * 200 * phys:GetMass())
     end
-    inv["Weapons"]["hg_sling"] = nil
+    inv["Weapons"]["cz_sling"] = nil
     ply:SetNetVar("Inventory",inv)
 
     local activewep = ply:GetActiveWeapon()
@@ -424,11 +424,11 @@ concommand.Add("hg_dropsling",function(ply)
     end
 end)
 
-concommand.Add("hg_dropkastet",function(ply)
+concommand.Add("cz_dropkastet",function(ply)
     if not ply:Alive() then return end
     local inv = ply:GetNetVar("Inventory")
-    if not inv["Weapons"] or not inv["Weapons"]["hg_brassknuckles"] then return end
-    local ent = ents.Create("hg_brassknuckles")
+    if not inv["Weapons"] or not inv["Weapons"]["cz_brassknuckles"] then return end
+    local ent = ents.Create("cz_brassknuckles")
     ent:SetPos(ply:EyePos())
     ent:SetAngles(ply:EyeAngles())
     ent:Spawn()
@@ -437,7 +437,7 @@ concommand.Add("hg_dropkastet",function(ply)
     if IsValid(phys) then
         phys:ApplyForceCenter(ply:GetAimVector() * 200 * phys:GetMass())
     end
-    inv["Weapons"]["hg_brassknuckles"] = nil
+    inv["Weapons"]["cz_brassknuckles"] = nil
     ply:SetNetVar("Inventory",inv)
 end)
 
@@ -460,7 +460,7 @@ function hgWreckBuildings(blaster, pos, power, range, ignoreVisChecks)
     local allProps = ents.FindInSphere(pos, maxRange)
 
     for k, prop in pairs(allProps) do
-        if not (table.HasValue(WreckBlacklist, prop:GetClass()) or hook.Run("hg_CanDestroyProp", prop, blaster, pos, power, range, ignore) == false or prop.ExplProof == true) then
+        if not (table.HasValue(WreckBlacklist, prop:GetClass()) or hook.Run("cz_CanDestroyProp", prop, blaster, pos, power, range, ignore) == false or prop.ExplProof == true) then
             local physObj = prop:GetPhysicsObject()
             local propPos = prop:LocalToWorld(prop:OBBCenter())
             local DistFrac = 1 - propPos:Distance(pos) / maxRange
@@ -505,7 +505,7 @@ end
 
 function hgBlastDoors(blaster, pos, power, range, ignoreVisChecks)
     for k, door in pairs(ents.FindInSphere(pos, 40 * power * (range or 1))) do
-        if hgIsDoor(door) and hook.Run("hg_CanDestroyDoor", door, blaster, pos, power, range, ignore) ~= false then
+        if hgIsDoor(door) and hook.Run("cz_CanDestroyDoor", door, blaster, pos, power, range, ignore) ~= false then
             local proceed = ignoreVisChecks
 
             if not proceed then
@@ -811,7 +811,7 @@ hook.Add("FinishMove", "SSSprays", function(ply, mv)
 end)
 
 if SERVER then
-    hook.Add( "Move", "hg_RagdollIntoWalls", function( ply, mv)
+    hook.Add( "Move", "cz_RagdollIntoWalls", function( ply, mv)
         local vel = mv:GetVelocity()
         if ply:GetMoveType() == MOVETYPE_WALK and vel:Length() > 750 and not hg.GetCurrentCharacter(ply):IsRagdoll() then
             local tr = util.TraceLine({
@@ -863,7 +863,7 @@ local function lowpass(samples, count, dt, RC)
     return samples2
 end
 
-local hg_developer = GetConVar("hg_developer")
+local cz_developer = GetConVar("cz_developer")
 
 local function funco(userId, buffer, count)
     local ply = Player(userId)
@@ -879,7 +879,7 @@ local function funco(userId, buffer, count)
         //buffer[i] = math.abs(buffer[i])
     end
 
-    /*if hg_developer:GetBool() then
+    /*if cz_developer:GetBool() then
         for i = 1, count do
             //buffer[i] = math.random(100) == 1 and 1000 or math.abs(math.cos(i / count * math.pi * 25)) * 1000
         end
@@ -1018,7 +1018,7 @@ end)
 
 
 local TrackedEnts = {
-	["weapon_crowbar"]={"weapon_hg_crowbar"},
+	["weapon_crowbar"]={"weapon_cz_crowbar"},
 	["weapon_stunstick"]={"weapon_pocketknife"},
 	["weapon_pistol"]={"weapon_hk_usp"},
 	["weapon_357"]={"weapon_revolver2"},
@@ -1026,9 +1026,9 @@ local TrackedEnts = {
 	["weapon_crossbow"]={"weapon_ar15","weapon_mp7"},
 	["weapon_ar2"]={"weapon_akm","weapon_m4a1"},
 	["weapon_smg1"]={"weapon_mp7"},
-	["weapon_slam"]={"weapon_hg_molotov_tpik"},
+	["weapon_slam"]={"weapon_cz_molotov_tpik"},
 	["weapon_rpg"]={"*ammo*"},
-	["item_ammo_ar2_altfire"]={"weapon_hg_molotov_tpik"},
+	["item_ammo_ar2_altfire"]={"weapon_cz_molotov_tpik"},
 	["item_ammo_357"]={"*ammo*"},
 	["item_ammo_357_large"]={"*ammo*"},
 	["item_ammo_pistol"]={"*ammo*"},
@@ -1047,23 +1047,23 @@ local TrackedEnts = {
 	["item_battery"]={"weapon_painkillers"},
 	["item_suit"]={"*ammo*"},
 	["weapon_alyxgun"] = {"weapon_smallconsumable","weapon_bigconsumable"},
-	["weapon_frag"] = {"weapon_hg_grenade_hl2grenade"},
-	["Grenade"] = {"weapon_hg_grenade_hl2grenade"},
-	["npc_grenade_frag"] = {"ent_hg_grenade_hl2grenade"},
+	["weapon_frag"] = {"weapon_cz_grenade_hl2grenade"},
+	["Grenade"] = {"weapon_cz_grenade_hl2grenade"},
+	["npc_grenade_frag"] = {"ent_cz_grenade_hl2grenade"},
 	["ent_jack_hmcd_ducttape"] = {"weapon_ducttape"},
 }
 
 local TrackedEntsHalfLife = {
-	["weapon_crowbar"]={"weapon_hg_crowbar"},
-	["weapon_stunstick"]={"weapon_hg_stunstick"},
+	["weapon_crowbar"]={"weapon_cz_crowbar"},
+	["weapon_stunstick"]={"weapon_cz_stunstick"},
 	["weapon_pistol"]={"weapon_hk_usp"},
 	["weapon_357"]={"weapon_revolver357"},
 	["weapon_shotgun"]={"weapon_spas12"},
-	["weapon_crossbow"]={"weapon_hg_crossbow"},
+	["weapon_crossbow"]={"weapon_cz_crossbow"},
 	["weapon_ar2"]={"weapon_osipr"},
 	["weapon_smg1"]={"weapon_mp7"},
-	["weapon_slam"]={"weapon_hg_slam"},
-	["weapon_rpg"]={"weapon_hg_rpg"},
+	["weapon_slam"]={"weapon_cz_slam"},
+	["weapon_rpg"]={"weapon_cz_rpg"},
 	["item_ammo_357"]={"ent_ammo_.357magnum"},
 	["item_ammo_357_large"]={"ent_ammo_.357magnum"},
 	["item_ammo_pistol"]={"ent_ammo_9x19mmparabellum"},
@@ -1090,18 +1090,18 @@ local TrackedEntsHalfLife = {
 local TrackedModels = {
 	["models/props_interiors/pot02a.mdl"] = "ent_armor_helmet4",
 	["models/props_c17/metalPot002a.mdl"] = "weapon_pan",
-	["models/props_junk/Shovel01a.mdl"] = "weapon_hg_shovel",
-	["models/props_junk/glassbottle01a.mdl"] = "weapon_hg_bottle",
-	["models/props_junk/glassbottle01a_chunk01a.mdl"] = "weapon_hg_bottlebroken",
-	["models/props_junk/garbage_glassbottle003a.mdl"] = "weapon_hg_bottle",
-	["models/props_junk/garbage_glassbottle003a_chunk01.mdl"] = "weapon_hg_bottlebroken",
+	["models/props_junk/Shovel01a.mdl"] = "weapon_cz_shovel",
+	["models/props_junk/glassbottle01a.mdl"] = "weapon_cz_bottle",
+	["models/props_junk/glassbottle01a_chunk01a.mdl"] = "weapon_cz_bottlebroken",
+	["models/props_junk/garbage_glassbottle003a.mdl"] = "weapon_cz_bottle",
+	["models/props_junk/garbage_glassbottle003a_chunk01.mdl"] = "weapon_cz_bottlebroken",
 	["models/props_canal/mattpipe.mdl"] = "weapon_leadpipe",
-	["models/props_junk/harpoon002a.mdl"] = "weapon_hg_spear",
-	["models/props_junk/garbage_coffeemug001a.mdl"] = "weapon_hg_mug",
-	//["models/props/cs_office/fire_extinguisher.mdl"] = "weapon_hg_extinguisher",
-	["models/weapons/w_fire_extinguisher.mdl"] = "weapon_hg_extinguisher",
-    ["models/props_junk/glassbottle01a_chunk01a.mdl"] = "weapon_hg_bottlebroken",
-	--!!["models/props/CS_militia/axe.mdl"] = "weapon_hg_axe",!! Убрал т.к реально бред
+	["models/props_junk/harpoon002a.mdl"] = "weapon_cz_spear",
+	["models/props_junk/garbage_coffeemug001a.mdl"] = "weapon_cz_mug",
+	//["models/props/cs_office/fire_extinguisher.mdl"] = "weapon_cz_extinguisher",
+	["models/weapons/w_fire_extinguisher.mdl"] = "weapon_cz_extinguisher",
+    ["models/props_junk/glassbottle01a_chunk01a.mdl"] = "weapon_cz_bottlebroken",
+	--!!["models/props/CS_militia/axe.mdl"] = "weapon_cz_axe",!! Убрал т.к реально бред
 }
 
 for str,ent in pairs(TrackedModels) do
@@ -1114,9 +1114,9 @@ local TrackedEntsNpc = table.Copy(TrackedEnts)
 
 TrackedEntsNpc["weapon_ar2"] = {"weapon_osipr"}
 TrackedEntsNpc["weapon_crowbar"]={"weapon_bat"}
-TrackedEntsNpc["weapon_stunstick"]={"weapon_hg_stunstick"}
+TrackedEntsNpc["weapon_stunstick"]={"weapon_cz_stunstick"}
 TrackedEntsNpc["weapon_shotgun"]={"weapon_spas12"}
-TrackedEntsNpc["npc_grenade_frag"]={"ent_hg_grenade_hl2grenade"}
+TrackedEntsNpc["npc_grenade_frag"]={"ent_cz_grenade_hl2grenade"}
 
 local fuckingwait = 0
 hook.Add("PreCleanupMap","asdsadasdashuc",function()

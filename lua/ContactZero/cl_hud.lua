@@ -5,12 +5,12 @@ hide = {
 	["CHudSecondaryAmmo"] = true,
 	["CHudCrosshair"] = true
 }
-local hg_font = ConVarExists("hg_font") and GetConVar("hg_font") or CreateClientConVar("hg_font", "Bahnschrift", true, false, "change every text font to selected because ui customization is cool")
-local font = function() -- hg_coolvetica:GetBool() and "Coolvetica" or "Bahnschrift"
+local cz_font = ConVarExists("cz_font") and GetConVar("cz_font") or CreateClientConVar("cz_font", "Bahnschrift", true, false, "change every text font to selected because ui customization is cool")
+local font = function() -- cz_coolvetica:GetBool() and "Coolvetica" or "Bahnschrift"
     local usefont = "Bahnschrift"
 
-    if hg_font:GetString() != "" then
-        usefont = hg_font:GetString()
+    if cz_font:GetString() != "" then
+        usefont = cz_font:GetString()
     end
 
     return usefont
